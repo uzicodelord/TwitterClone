@@ -1,9 +1,11 @@
 <?php
+
+namespace Likes;
 class Likes
 {
-    public $tweetName;
-    public $tweetId;
-    public $likes;
+    private $tweetName;
+    private $tweetId;
+    private $likes;
 
     public function __construct()
     {
@@ -14,7 +16,7 @@ class Likes
 
     public function updateLikes()
     {
-        include './database/dbConfig.php';
+        require_once 'C:/xampp/htdocs/twitteruzi/database/dbConfig.php';
         session_start();
         $username = $_SESSION['username'];
         $sql = "SELECT liked_by, tweet_likes FROM tweets WHERE tweeter_name='$this->tweetName' and id='$this->tweetId'";

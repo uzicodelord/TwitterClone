@@ -1,0 +1,14 @@
+{
+    "description": "A Twitter clone by Uzi",
+    "type": "project",
+    "require": {
+        "psr/log": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "twitteruzi\\": "classes/src"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

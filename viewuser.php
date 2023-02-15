@@ -4,16 +4,15 @@ if (!$_SESSION['username']) {
     header('location: index.php');
 }
 
-require_once 'database/dbConfig.php';
+require_once 'includes/autoload.php';
 $userToView = $_GET['user'];
-$sql = "SELECT * FROM users WHERE username='$userToView'";
-$result = $Conn->query($sql);
+use User\User;
 
-while ($row = $result->fetch_assoc()) {
-    $username = $row['username'];
-    $email = $row['email'];
-    $reg_date = $row['reg_date'];
-}
+$user = new User($userToView);
+$username = $user->getUsername();
+$email = $user->getEmail();
+$reg_date = $user->getRegDate();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,10 +35,63 @@ while ($row = $result->fetch_assoc()) {
                     document.getElementById("num_like" + tweetId).innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "likeTweet.php?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
+            xmlhttp.open("GET", "/twitteruzi/classes/src/Likes/Likes.php?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
             xmlhttp.send();
         }
+
+        function deleteTweet(tweetId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "classes/src/DeleteTweet/DeleteTweet.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        alert('Tweet deleted successfully');
+                    } else {
+                        alert('Error deleting tweet');
+                    }
+                }
+            };
+            xhr.send("tweetId=" + tweetId);
+        }
+
+        function submitComment(tweetId, textareaId) {
+            console.log("tweetId:", tweetId);
+            const commentText = encodeURIComponent(document.getElementById(textareaId).value);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "classes/src/Comment/Comment.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    alert("Comment posted successfully");
+                    location.reload();
+                }
+            };
+            xhr.send(`comment_text=${commentText}&tweet_id=${tweetId}`);
+        }
+
     </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #008abe;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: white;
+        }
+    </style>
 
 </head>
 
@@ -47,12 +99,12 @@ while ($row = $result->fetch_assoc()) {
 
 <div class="container">
     <div class="row">
-        <div class="icon-bar">
-            <a style="color:white; background-color: #0066cc;" href="homepage.php"><i
-                    class="fa fa-home tabLogo "></i></a>
+        <div class="icon-bar" style="width:100%;border:0;">
+            <a href="homepage.php">
+                <i class="fa fa-home tabLogo "></i></a>
             <a href="myProfile.php"><i class="fa fa-user tabLogo "></i></a>
             <a href="editProfile.php"><i class="fa fa-cog tabLogo "></i></a>
-            <a href="logout.php"><i class="fa fa-sign-out"></i></a>
+            <a href="classes/src/LogOut/LogOut.php"><i class="fa fa-sign-out tabLogo "></i></a>
         </div>
         <div style="background-color:white;">
             <div style="float:right; margin-top:30px; margin-right:10px;">
@@ -84,26 +136,10 @@ while ($row = $result->fetch_assoc()) {
 
     <div id="recentTw" class="mainContainer">
         <?php
-        require_once 'database/dbConfig.php';
-        $updateQuery = "SELECT * FROM tweets ORDER BY tweet_time DESC LIMIT 0, 50";
-        $query = "SELECT * FROM users WHERE username = '$username'";
-        $viewLink = "viewuser.php?user=";
-        $result = $Conn->query($updateQuery);
-        while ($row = $result->fetch_assoc()) {
-            if ($row['tweeter_name']) {
-                echo "<div class='row eachTw'>
-            <div class='col-md-12 col-xs-10'>
-                <span class='postHeader'><a href='" . $viewLink . $row['tweeter_name'] . "'>@" . $row['tweeter_name'] . "</a><br>
-                    <span style='font-size:14px; color:#bfbfbf; float:right'>" . $row['tweet_time'] . "</span>
-                </span> <i class='fa fa-clock-o' style='padding-top:3px; color:#bfbfbf; float:right;'>&nbsp;</i>
-                <br><br>" . $row['tweet_content'] . "<br><br><center><div class='line'></div></center><br>
-                <p style='font-size:15px; '><a style='cursor:pointer' onclick=likeTweet('" . $row['tweeter_name'] . "','" . $row['id'] . "','" . $row['tweet_likes'] . "') name='like' style='color:black; '><span class='fa fa-thumbs-up ' style='font-size:32px; '></span></a><span id='num_like" . $row['id'] . "'> " . $row['tweet_likes'] . "</span> people(s) liked this.</p>
-            </div>
-        </div>";
+        use ViewUser\ViewUser;
 
-            }
-        }
-
+        $viewUser = new ViewUser($Conn);
+        $viewUser->displayTweets();
         ?>
 
     </div>

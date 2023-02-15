@@ -3,7 +3,20 @@ session_start();
 if (isset($_SESSION['username'])) {
     header('location: homepage.php');
 }
+include './includes/autoload.php';
+use SignUpAndSignIn\SignUpAndSignIn;
+
+$loginsignup = new SignUpAndSignIn();
+$RegStatus = $loginsignup->getRegStatus();
+$LoginStatus = $loginsignup->getLoginStatus();
+$txtEmail = $loginsignup->getTxtEmail();
+$txtEmailErr = $loginsignup->getTxtEmailErr();
+$txtUsername = $loginsignup->getTxtUsername();
+$txtUsernameErr = $loginsignup->getTxtUsernameErr();
+$txtPassword = $loginsignup->getTxtPassword();
+$txtPasswordErr = $loginsignup->getTxtPasswordErr();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,116 +33,29 @@ if (isset($_SESSION['username'])) {
 
 </head>
 
+<style>
+    body {
+        background-color: #008abe;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        color: #fff;
+    }
+
+    label {
+        color: #fff;
+    }
+</style>
+
+
 <body>
-    <?php
-
-    require_once 'database/dbConfig.php';
-
-    // for Sign UP
-    $txtUsername = $txtPassword = $txtEmail = "";
-    $txtPasswordErr = $txtEmailErr = $txtUsernameErr = "";
-    $RegStatus = "Register Here";
-    $passwordIsset = $emailIsset = false;
-
-    // for Sign In
-    $LoginStatus = "Login Here";
-    $txtLoginUsername = $txtLoginPassword = "";
-    $txtLoginUsernameErr = $txtLoginPasswordErr = "";
 
 
-    if (isset($_POST['btnSignUp'])) {
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-
-
-            $txtUsername = mysqli_escape_string($Conn, formatData($_POST['txtUsername']));
-            $txtUsername = ucfirst($txtUsername);
-
-
-            if (strlen($_POST['txtPassword']) < 6) {
-                $txtPasswordErr = "Password must be atleast 6 characters long";
-                $RegStatus = "Not Registered";
-            } else {
-                $passwordIsset = true;
-                $txtPassword = mysqli_escape_string($Conn, formatData($_POST['txtPassword']));
-            }
-
-
-        }
-
-        if (!filter_var($_POST['txtEmail'], FILTER_VALIDATE_EMAIL)) {
-            $txtEmailErr = "Invalid Email Address";
-            $RegStatus = "Not Registered";
-        } else {
-            $txtEmailErr = "";
-            $emailIsset = true;
-            $txtEmail = mysqli_escape_string($Conn, formatData($_POST['txtEmail']));
-        }
-
-
-        $sql = "INSERT INTO users VALUES(null, '$txtUsername', '$txtPassword', '$txtEmail', null)";
-
-        if ($Conn->query($sql) === TRUE) {
-            $RegStatus = "Registration was Successful,<br> Please Proceed to Login..";
-            $txtUsername = $txtPassword = $txtEmail = "";
-            $txtPasswordErr = $txtEmailErr = $txtUsernameErr = "";
-            $passwordIsset = $emailIsset = false;
-        } else {
-            //Username availiabilty..
-            if ($Conn->error == "Duplicate entry '$txtUsername' for key 'username'") {
-                $RegStatus = "Username already exist Please choose another";
-                $txtUsernameErr = "Invalid Username";
-            } else {
-                $RegStatus = "Error: <br>" . $Conn->error;
-                $txtUsernameErr = "";
-            }
-        }
-
-        $Conn->close();
-
-
-    }
-
-
-
-    if (isset($_POST['btnSignIn'])) {
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $txtLoginUsername = mysqli_escape_string($Conn, formatData($_POST['txtLoginUsername']));
-            $txtLoginPassword = mysqli_escape_string($Conn, formatData($_POST['txtLoginPassword']));
-            $LoginSql = "SELECT * FROM users WHERE username = '$txtLoginUsername' AND BINARY password = '$txtLoginPassword'";
-            $result = $Conn->query($LoginSql);
-            if ($result->num_rows != 1) {
-                $LoginStatus = "Username or Password not valid, please try again..";
-                $txtLoginUsername = "";
-                $txtLoginPassword = "";
-            } else {
-                $LoginStatus = "Login Here";
-                $_SESSION['username'] = $txtLoginUsername;
-                $selectQuery = "SELECT * FROM users WHERE username = '$txtLoginUsername'";
-                $result = $Conn->query($selectQuery);
-                $row = $result->fetch_assoc();
-
-                $_SESSION['email'] = $row['email'];
-
-                header('location:homepage.php');
-
-            }
-        }
-    }
-
-    function formatData($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
-
-    ?>
-
-
-
-    <div class="container-fluid" style="color: black">
+    <div class="container-fluid" style="color: #fff;">
 
         <div class="row" id="signIn">
             <form method="post">
@@ -137,7 +63,7 @@ if (isset($_SESSION['username'])) {
                     <center>
                         <h2 style="margin-bottom:10px;">Sign In <span class="glyphicon" style="color:#5b3e4d;"></span>
                         </h2><br>
-                        <div class="alert alert-success alert-dismissable" style="width:70%;"><button type="button"
+                        <div class="alert alert-success alert-dismissable" style="width:60%;background-color: #333;color:#fff;"><button type="button"
                                 class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             <?php echo $LoginStatus; ?>
                         </div>
@@ -162,15 +88,17 @@ if (isset($_SESSION['username'])) {
                     <form method="post">
                         <center>
                             <h2 style="margin-bottom:10px;">Sign Up <span class="glyphicon"></span></h2><br>
-                            <div class="alert alert-info alert-dismissable"><button type="button" class="close"
+                            <div class="alert alert-info alert-dismissable" style="width:100%;background-color: #333;color:#fff;"><button type="button" class="close"
                                     data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <?php echo $RegStatus; ?>
+                                <?php
+                                echo $RegStatus; ?>
                             </div>
 
                             <div class="form-group">
                                 <label for="txtEmail">Email</label>
-                                <input type="text" name="txtEmail" class="form-control" required
-                                    value="<?php echo $txtEmail; ?>">
+                                <input type="text" name="txtEmail" class="form-control" required value="
+                                <?php
+                                echo $txtEmail; ?>">
                                 <span class="errorSpan">
                                     <?php echo $txtEmailErr; ?>
                                 </span>
@@ -205,40 +133,32 @@ if (isset($_SESSION['username'])) {
 
     </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="Bootstrap/js/bootstrap.min.js"></script>
 
     <script>
-    $(document).ready(function() {
-        $('body').scrollspy({
-            target: ".navbar",
-            offset: 50
-        });
-
-        // Add smooth scrolling to all links inside a navbar
-        $("#navBar a").on('click', function(event) {
-
-            // Prevent default anchor click behavior
-            event.preventDefault();
-
-            // Store hash (#)
-            var hash = this.hash;
-
-            // Using jQuery's animate() method to add smooth page scroll
-            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area (the speed of the animation)
-            $('html, body').animate({
-                scrollTop: $(hash).offset().top
-            }, 800, function() {
-
-                // Add hash (#) to URL when done scrolling (default click behavior)
-                window.location.hash = hash;
+        $(document).ready(function () {
+            $('body').scrollspy({
+                target: ".navbar",
+                offset: 50
             });
-        });
 
-    })
+            $("#navBar a").on('click', function (event) {
+
+                event.preventDefault();
+
+                // Store hash (#)
+                var hash = this.hash;
+
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                }, 800, function () {
+                    window.location.hash = hash;
+                });
+            });
+
+        })
     </script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
 </body>
 
 </html>

@@ -1,11 +1,12 @@
 <?php
+
 class DBConnect
 {
     private $serverName;
     private $username;
     private $password;
     private $databaseName;
-    public $Conn;
+    private $Conn;
 
     public function __construct($serverName, $username, $password, $databaseName)
     {
@@ -23,9 +24,9 @@ class DBConnect
             die ($this->Conn->connect_error);
             $this->Conn->Close();
         }
+        return $this->Conn;
     }
 }
 $db = new DBConnect("localhost", "root", "", "twitteruzi");
-$db->Connect();
-$Conn = $db->Conn;
+$Conn = $db->Connect();
 ?>

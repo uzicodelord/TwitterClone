@@ -1,4 +1,6 @@
 <?php
+
+namespace User;
 class User
 {
     protected $username;
@@ -13,6 +15,7 @@ class User
     private function getDetails($userToView)
     {
         require_once 'database/dbConfig.php';
+        global $Conn;
         $sql = "SELECT * FROM users WHERE username='$userToView'";
         $result = $Conn->query($sql);
         while($row = $result->fetch_assoc()){
