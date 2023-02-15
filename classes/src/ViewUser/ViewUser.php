@@ -19,7 +19,7 @@ class ViewUser
         $this->result = $Conn->query($this->updateQuery);
     }
 
-    public function displayTweets(): void5
+    public function displayTweets(): void
     {
         while ($row = $this->result->fetch_assoc()) {
             if (isset($_GET['user']) && $row['tweeter_name'] == $_GET['user']) {
