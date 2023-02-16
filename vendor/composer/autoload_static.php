@@ -7,24 +7,24 @@ namespace Composer\Autoload;
 class ComposerStaticInitb7c0ce713dddfa4a8808c274b41f13ba
 {
     public static $prefixLengthsPsr4 = array (
-        't' => 
-        array (
-            'twitteruzi\\' => 11,
-        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
         ),
+        'A' => 
+        array (
+            'App\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'twitteruzi\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/TwitterClone/src',
-        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

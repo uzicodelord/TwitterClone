@@ -1,11 +1,10 @@
 <?php
+require './vendor/autoload.php';
 session_start();
 if (isset($_SESSION['username'])) {
     header('location: homepage.php');
 }
-include './includes/autoload.php';
-use SignUpAndSignIn\SignUpAndSignIn;
-
+use App\SignUpAndSignIn;
 $loginsignup = new SignUpAndSignIn();
 $RegStatus = $loginsignup->getRegStatus();
 $LoginStatus = $loginsignup->getLoginStatus();
@@ -15,6 +14,7 @@ $txtUsername = $loginsignup->getTxtUsername();
 $txtUsernameErr = $loginsignup->getTxtUsernameErr();
 $txtPassword = $loginsignup->getTxtPassword();
 $txtPasswordErr = $loginsignup->getTxtPasswordErr();
+
 ?>
 
 <!DOCTYPE html>

@@ -1,12 +1,3 @@
-<?php
-require './vendor/autoload.php';
-session_start();
-if (!$_SESSION['username']) {
-    header('location: index.php');
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,9 +6,9 @@ if (!$_SESSION['username']) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TwitterClone</title>
-    <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/twitteruzi/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/homepage.css" rel="stylesheet">
+    <link href="/twitteruzi/css/homepage.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap">
 
     <!--Ajax -->
@@ -29,13 +20,13 @@ if (!$_SESSION['username']) {
                     document.getElementById("num_like" + tweetId).innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "route.php/tweet/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
+            xmlhttp.open("GET", "/twitteruzi/route.php/tweet/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
             xmlhttp.send();
         }
 
         function deleteTweet(tweetId) {
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "route.php/tweet/delete", true);
+            xhr.open("POST", "/twitteruzi/route.php/tweet/delete", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -54,7 +45,7 @@ if (!$_SESSION['username']) {
             console.log("tweetId:", tweetId);
             const commentText = encodeURIComponent(document.getElementById(textareaId).value);
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "route.php/comment/create", true);
+            xhr.open("POST", "/twitteruzi/route.php/comment/create", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
@@ -101,6 +92,7 @@ if (!$_SESSION['username']) {
             <center>
 
                 <h4>Create New Tweet</h4><br>
+
                 <?php
 
                 use App\Tweet;
@@ -110,7 +102,7 @@ if (!$_SESSION['username']) {
                 $request = new Request();
 
                 if (isset($_POST['btnTweet'])) {
-                    $txtNewTweet = $_POST['txtNewTweet'];
+                    $txtNewTweet = $request->post('txtNewTweet');
                     $txtTweetName = $_SESSION['username'];
                     $tweet->createTweet($txtNewTweet, $txtTweetName);
                 }

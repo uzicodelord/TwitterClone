@@ -6,6 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'twitteruzi\\' => array($baseDir . '/TwitterClone/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'App\\' => array($baseDir . '/src'),
 );

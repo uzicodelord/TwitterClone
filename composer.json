@@ -6,7 +6,7 @@
     },
     "autoload": {
         "psr-4": {
-            "twitteruzi\\": "classes/src"
+            "App\\": "src"
         }
     },
     "minimum-stability": "dev",
