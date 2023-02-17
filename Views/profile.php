@@ -105,7 +105,7 @@ if (isset($_GET['logout'])) {
                 <h4>Email: <b>
                         <?php echo $_SESSION['email'] ?>
                     </b></h4>
-                <h5><a href="editProfile.php" style="color:#fff;float:right;">[Edit Profile]</a></h5>
+                <h5><a href="edit.php" style="color:#fff;float:right;">[Edit Profile]</a></h5>
             </div>
 
             <h4><b>My Tweets</b></h4>
