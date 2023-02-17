@@ -1,6 +1,6 @@
 <?php
 
-namespace LogOut;
+namespace App\Model;
 
 class LogOut
 {
@@ -18,8 +18,3 @@ class LogOut
         header('Location: '.$this->redirectUrl);
     }
 }
-
-$session = new LogOut('/twitteruzi/index.php');
-$session->destroySession();
-
-?>

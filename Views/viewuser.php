@@ -4,17 +4,14 @@ session_start();
 if (!$_SESSION['username']) {
     header('location: index.php');
 }
+
 use App\Controller\LogoutController;
 if (isset($_GET['logout'])) {
     $logoutSystem = new LogoutController();
     $logoutSystem->logout();
     exit;
 }
-
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,7 +25,6 @@ if (isset($_GET['logout'])) {
     <link href="/twitteruzi/css/homepage.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap">
 
-    <!--Ajax -->
     <script>
         function likeTweet(tweetName, tweetId, tweetlikes) {
             xmlhttp = new XMLHttpRequest();
@@ -74,7 +70,6 @@ if (isset($_GET['logout'])) {
 
 
     </script>
-
     <style>
         body {
             background-color: #008abe;
@@ -87,80 +82,56 @@ if (isset($_GET['logout'])) {
         h5 {
             color: white;
         }
-
-        textarea {
-            resize: none;
-        }
     </style>
 
 
 </head>
-
+<body>
 <div class="container">
     <div class="row">
         <div class="icon-bar" style="width:100%;border:0;">
-            <a style="color:white; background-color: #333;" href="/twitteruzi/Views/home.php">
+            <a  href="/twitteruzi/Views/home.php">
                 <i class="fa fa-home tabLogo "></i></a>
-            <a href="profile.php"><i class="fa fa-user tabLogo "></i></a>
-            <a href="edit.php"><i class="fa fa-cog tabLogo "></i></a>
+            <a style="color:white; background-color: #333;" href="/twitteruzi/Views/profile.php"><i class="fa fa-user tabLogo "></i></a>
+            <a href="/twitteruzi/Views/edit.php"><i class="fa fa-cog tabLogo "></i></a>
             <a href="?logout"><i class="fa fa-sign-out tabLogo "></i></a>
         </div>
 
-        <div id="recentTw" class="mainContainer" style="height:auto;">
-            <center>
+        <div id="myProfile" class="mainContainer" style="height:auto;"><br>
+            <div class="row">
+                <h2 style="">@
+                    <?php echo $_SESSION['username'] ?>
+                </h2>
+                <h4>Email: <b>
+                        <?php echo $_SESSION['email'] ?>
+                    </b></h4>
+                <h5><a href="editProfile.php" style="color:#fff;float:right;">[Edit Profile]</a></h5>
+            </div>
 
-                <h4>Create New Tweet</h4><br>
-
-
-                <form method="post" action="/twitteruzi/route.php/tweet/create">
-                    <textarea placeholder="What's Happening with Uzi bro?" name="txtNewTweet" rows="2" cols="90"
-                              required minlength="3" style="font-size:16px;padding:10px; width:30%;"></textarea><br><br>
-                    <button type="submit" name="btnTweet" class="btn btn-success btn-lg">Tweet <i
-                                class="fa fa-twitter"></i></button>
-                </form>
-        </div>
-
-        <div id="recentTw" class="container" style="height:auto;">
-
-            <center>
-                <div class="bSearch">
-                    <div class="searchWrapper" style="margin-left:30px;">
-                        <form method="get" action="/twitteruzi/route.php/tweet/search">
-                            <input type="search" class="txtSearch" placeholder="Search" name="txtSearch">
-                            <button type="submit" name="btnSearch" class="btnSearch" value=""><span
-                                        class="glyphicon glyphicon-search"></span></button>
-                        </form>
-                    </div>
-            </center>
+            <h4><b>My Tweets</b></h4>
         </div>
 
         <div id="recentTw" class="mainContainer">
-            <h4>
-                <center>Recent Tweets
-            </h4><br>
+
             <?php
             use App\Model\TweetDisplay;
-
-            // create a new instance of the TweetDisplay class
             $tweetDisplay = new TweetDisplay();
-            // call the displayTweets() method to get an array of tweet data
             $tweets = $tweetDisplay->displayTweets();
             ?>
 
-            <!-- iterate over the tweets and display them on the page -->
             <?php foreach ($tweets as $tweet): ?>
-            <?php
-            $username = $tweet['tweeter_name'];
-            $tweetTime = $tweet['tweet_time'];
-            $tweetContent = $tweet['tweet_content'];
-            $tweetLikes = $tweet['tweet_likes'];
-            $tweetId = $tweet['id'];
-            ?>
+                <?php
+                $username = $tweet['tweeter_name'];
+                $tweetTime = $tweet['tweet_time'];
+                $tweetContent = $tweet['tweet_content'];
+                $tweetLikes = $tweet['tweet_likes'];
+                $tweetId = $tweet['id'];
+                ?>
 
-
-            <div class='row eachTw'>
-                <div class='col-md-12 col-xs-10'>
-            <span class='postHeader'><a href='viewuser.php?user=<?php echo $username; ?>'>@<?php echo $username; ?></a><br>
+                <?php if (isset($_GET['user']) && $tweet['tweeter_name'] == $_GET['user']):?>
+                    <div class='row eachTw'>
+                    <div class='col-md-12 col-xs-10'>
+                    <span class='postHeader'><a href='viewuser.php?user=<?php echo $username; ?>'>@<?php echo $username; ?></a><br>
             <span style='font-size:14px;margin-top:-30px; color:#bfbfbf; float:right'><?php echo $tweetTime; ?></span>
             <div style='font-family: sans-serif;'>
                 <br><?php echo $tweetContent; ?><br><br><center><div class='line'></div></div></center><br>
@@ -171,6 +142,7 @@ if (isset($_GET['logout'])) {
                     <span id='num_like<?php echo $tweetId; ?>'> <?php echo $tweetLikes; ?></span> people(s) liked this.
                 </p>
             </span>
+
 
                     <?php if ($username == $_SESSION['username']):?>
                         <form method='post' onclick=deleteTweet('<?php echo $tweetId; ?>')>
@@ -183,46 +155,49 @@ if (isset($_GET['logout'])) {
 
                     <?php $textareaId = "comment_text_$tweetId"; ?>
 
-                    <!-- display the comment form -->
                     <form method='post'>
                         <input type='hidden' id='tweet_id' value='<?php echo $tweetId; ?>'>
-                            <textarea id='<?php echo $textareaId; ?>' rows='1' cols='20' required style='font-size:16px;padding:10px; width:20%;float:left;'></textarea><br>
+                        <textarea id='<?php echo $textareaId; ?>' rows='1' cols='20' required style='font-size:16px;padding:10px; width:20%;float:left;'></textarea><br>
                         <button style='float:left;margin-top:-20px;' type='button' class='btn btn-success btn-lg' onclick='submitComment(<?php echo $tweetId; ?>, "<?php echo $textareaId; ?>")'>Comment</button><br><br><br>
                     </form>
 
                     <div class="commentBox" style="margin-top: -70px">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <?php $comments = $tweet['comments']; ?>
-                                <?php if (!empty($comments)): ?>
-                                    <h4>Comments:</h4>
-                                    <?php foreach ($comments as $comment): ?>
-                                        <div class="comment">
-                                            <p><b><a style="font-size: 16px;" href='viewuser.php?user=<?php echo $username; ?>'>@<?php echo $username; ?></a></b></p>
-                                            <p style="font-size: 16px;"><?php echo $comment['comment_text']; ?></p>
-                                            <p><small style="float:right;margin-top: -60px;"><?php echo $comment['comment_time']; ?></small></p>
-                                        </div>
-                                    <?php endforeach; ?>
-
-                                <?php endif; ?>
-
+                    <div class="row">
+                    <div class="col-sm-12">
+                    <?php $comments = $tweet['comments']; ?>
+                    <?php if (!empty($comments)): ?>
+                        <h4>Comments:</h4>
+                        <?php foreach ($comments as $comment): ?>
+                            <div class="comment">
+                                <p><b><a style="font-size: 16px;" href='viewuser.php?user=<?php echo $username; ?>'>@<?php echo $username; ?></a></b></p>
+                                <p style="font-size: 16px;"><?php echo $comment['comment_text']; ?></p>
+                                <p><small style="float:right;margin-top: -60px;"><?php echo $comment['comment_time']; ?></small></p>
                             </div>
-                        </div>
 
-                    </div>
+                        <?php endforeach; ?>
+
+                    <?php endif; ?>
+
 
                 </div>
 
-            </div>
+                </div>
+
+                </div>
+
+                </div>
+
+                </div>
+                <?php endif; ?>
             <?php endforeach; ?>
 
 
 
+
+
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js "></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/twitteruzi/Bootstrap/js/bootstrap.min.js "></script>
-
-
-</div>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="/twitteruzi/Bootstrap/js/bootstrap.min.js "></script>
+</body>
 
 </html>

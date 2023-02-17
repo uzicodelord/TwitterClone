@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Model;
-use App\Database;
 class Likes extends Database
 {
     private $tweetName;
@@ -39,8 +38,3 @@ class Likes extends Database
         $this->Conn->query($sql2);
     }
 }
-
-
-
-
-?>

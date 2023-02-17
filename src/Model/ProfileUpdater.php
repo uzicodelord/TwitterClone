@@ -1,14 +1,9 @@
 <?php
 
-namespace App;
-class ProfileUpdater
-{
-    private $conn;
+namespace App\Model;
 
-    public function __construct($conn)
-    {
-        $this->conn = $conn;
-    }
+class ProfileUpdater extends Database
+{
 
     public function updateProfile($email, $password = '')
     {
@@ -17,12 +12,12 @@ class ProfileUpdater
 
         if (empty($password)) {
             $sql = "UPDATE users SET email='$email' WHERE username='$username'";
-            $this->conn->query($sql);
+            $this->Conn->query($sql);
             echo "<center><div class='alert alert-success alert-dismissable' style='width:70%;'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Profile Was Updated Successfully..</div></center>";
         } else {
             $password = $this->formatData($password);
             $sql = "UPDATE users SET password='$password', email='$email' WHERE username='$username'";
-            $this->conn->query($sql);
+            $this->Conn->query($sql);
             echo "<center><div class='alert alert-success alert-dismissable' style='width:70%;'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Profile Was Updated Successfully..</div></center>";
             $_SESSION['email'] = $email;
         }
@@ -36,4 +31,3 @@ class ProfileUpdater
         return $data;
     }
 }
-?>

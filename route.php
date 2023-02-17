@@ -11,4 +11,3 @@ $method = explode("?", $method);
 $class = "App\\Controller\\" . $class . "Controller";
 $class = new $class();
 echo $class->{$method[0]}();
-?>

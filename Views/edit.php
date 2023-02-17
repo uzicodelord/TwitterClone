@@ -15,10 +15,10 @@ if (!$_SESSION['username']) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TwitterClone</title>
-    <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/twitteruzi/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/homepage.css" rel="stylesheet">
-    <link href="css/editProfile.css" rel="stylesheet">
+    <link href="/twitteruzi/css/homepage.css" rel="stylesheet">
+    <link href="/twitteruzi/css/editProfile.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap">
 
 </head>
@@ -47,7 +47,7 @@ if (!$_SESSION['username']) {
 
 
     <br>
-    <a href='myProfile.php' style="font-size:18px; margin-left:30px;color:#fff;"><span
+    <a href='profile.php' style="font-size:18px; margin-left:30px;color:#fff;"><span
             class="glyphicon glyphicon-chevron-left"></span>Back</a>
 
 
@@ -57,31 +57,32 @@ if (!$_SESSION['username']) {
             <br>
 
             <?php
-            use App\Controller\EditController;
-            use Request\Request;
 
-            $profileUpdater = new profileUpdater();
+            use App\Controller\EditController;
+            use App\Model\Request;
+
+            $profileUpdater = new EditController();
             $request = new Request();
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $email = $request->post('txtEmail');
-                $password = !empty($request->post('txtNewPassword')) ? $request->post('txtNewPassword') : '';
-                $profileUpdater->updateProfile($email, $password);
+                $password = !empty($_POST['txtNewPassword']) ? $_POST['txtNewPassword'] : '';
+                $profileUpdater->edit($email, $password);
             }
 
             ?>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" action="/twitteruzi/route.php/edit/edit">
                 <div class="form">
                     <label for="txtNewPassword">New Password</label>
                     <input class="form-control" type="password" id="txtNewPassword" name="txtNewPassword"
-                        placeholder="New Password">
+                           placeholder="New Password">
                     <span style="color:#a6a6a6; font-size:11px;">(Please leave it blank if you don't wish to
                         edit your password)</span>
                     <br><br>
                     <br>
                     <label for="txtEmail">Email</label>
                     <input class="form-control" id="txtEmail" required name="txtEmail" type="text" placeholder="Email"
-                        value="<?php echo $_SESSION['email'] ?>"><br>
+                           value="<?php echo $_SESSION['email'] ?>"><br>
                     <br><br>
                     <button type="submit" class="btn btn-success btn-lg"><span
                             class="glyphicon glyphicon-edit"></span>&nbsp; Save</button>
@@ -99,7 +100,7 @@ if (!$_SESSION['username']) {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js "></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="bootstrap/js/bootstrap.min.js "></script>
+<script src="/twitteruzi/Bootstrap/js/bootstrap.min.js "></script>
 </body>
 
 </html>

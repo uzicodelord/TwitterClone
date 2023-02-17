@@ -1,15 +1,14 @@
 <?php
 
-namespace SignUpAndSignIn;
+namespace App\Model;
 
-class SignUpAndSignIn
+class SignUpAndSignIn extends Database
 {
-    private $txtUsername, $txtPassword, $txtEmail, $txtPasswordErr, $txtEmailErr, $txtUsernameErr, $RegStatus, $passwordIsset, $emailIsset, $LoginStatus, $txtLoginUsername, $txtLoginPassword, $txtLoginUsernameErr, $txtLoginPasswordErr, $Conn;
+    private $txtUsername, $txtPassword, $txtEmail, $txtPasswordErr, $txtEmailErr, $txtUsernameErr, $RegStatus, $passwordIsset, $emailIsset, $LoginStatus, $txtLoginUsername, $txtLoginPassword, $txtLoginUsernameErr, $txtLoginPasswordErr;
 
     public function __construct()
     {
-        $this->Conn = mysqli_connect('localhost', 'root', '', 'twitteruzi');
-
+        parent::__construct();
         $this->txtUsername = $this->txtPassword = $this->txtEmail = "";
         $this->txtPasswordErr = $this->txtEmailErr = $this->txtUsernameErr = "";
         $this->RegStatus = "Register Here";
@@ -88,7 +87,7 @@ class SignUpAndSignIn
 
                     $_SESSION['email'] = $row['email'];
 
-                    header('location:homepage.php');
+                    header('location:home.php');
                 }
             }
         }

@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Model\Comment;
-use App\Request;
+use App\Model\Request;
 
 class CommentController
 {

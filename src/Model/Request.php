@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 class Request
 {
@@ -31,5 +31,3 @@ class Request
         }
     }
 }
-
-?>

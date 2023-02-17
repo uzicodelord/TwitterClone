@@ -1,21 +1,16 @@
 <?php
 
-namespace App;
-class Search
-{
-    private $conn;
+namespace App\Model;
 
-    public function __construct()
-    {
-        $this->conn = mysqli_connect('localhost', 'root', '', 'twitteruzi');
-    }
+class Search extends Database
+{
 
     public function searchUser($txtSearch)
     {
-        $viewLink = "viewuser.php?user=";
-        $txtSearch = trim(mysqli_escape_string($this->conn, $txtSearch));
+        $viewLink = "/twitteruzi/Views/viewuser.php?user=";
+        $txtSearch = trim(mysqli_escape_string($this->Conn, $txtSearch));
         $searchQuery = "SELECT * FROM users WHERE username LIKE '%$txtSearch%' or username LIKE '%$txtSearch%' or email LIKE '%$txtSearch%'";
-        $result = $this->conn->query($searchQuery);
+        $result = $this->Conn->query($searchQuery);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<br><center>";
@@ -29,4 +24,3 @@ class Search
     }
 }
 
-$search = new Search();

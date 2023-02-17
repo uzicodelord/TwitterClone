@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Model;
-use App\Database;
 
 class Comment extends Database
 {
@@ -24,6 +23,3 @@ class Comment extends Database
         }
     }
 }
-
-
-?>
