@@ -1,11 +1,30 @@
 <?php
+
 namespace App\Controller;
 
-class HomeController{
-    public function index(){
-        $name = 'uzi';
-        include 'Views/home.php';
+use App\BaseController;
+
+class HomeController extends BaseController
+{
+    public function index()
+    {
+        $deleteTweet = new TweetController();
+        $deleteTweet->delete();
+
+        $like = new TweetController();
+        $like->like();
+
+        $comment = new CommentController();
+        $comment->create();
+
+        $create = new TweetController();
+        $create->create();
+
+        $search = new TweetController();
+        $search->search();
+
+        $display = new TweetController();
+        $display->display();
+
     }
 }
-
-?>

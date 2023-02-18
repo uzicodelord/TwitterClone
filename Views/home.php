@@ -37,42 +37,34 @@ if (isset($_GET['logout'])) {
                     document.getElementById("num_like" + tweetId).innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "/twitteruzi/route.php/tweet/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
+            xmlhttp.open("GET", "/twitteruzi/index.php/tweet/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
             xmlhttp.send();
         }
 
         function deleteTweet(tweetId) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/twitteruzi/route.php/tweet/delete", true);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/twitteruzi/index.php/tweet/delete", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.status === 'success') {
-                        alert('Tweet deleted successfully');
-                    } else {
-                        alert('Error deleting tweet');
-                    }
+                    location.reload();
                 }
             };
             xhr.send("tweetId=" + tweetId);
         }
 
         function submitComment(tweetId, textareaId) {
-            console.log("tweetId:", tweetId);
             const commentText = encodeURIComponent(document.getElementById(textareaId).value);
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "/twitteruzi/route.php/comment/create", true);
+            xhr.open("POST", "/twitteruzi/index.php/comment/create", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    alert("Comment posted successfully");
+                    location.reload();
                 }
             };
             xhr.send(`comment_text=${commentText}&tweet_id=${tweetId}`);
         }
-
-
     </script>
 
     <style>
@@ -112,7 +104,7 @@ if (isset($_GET['logout'])) {
                 <h4>Create New Tweet</h4><br>
 
 
-                <form method="post" action="/twitteruzi/route.php/tweet/create">
+                <form method="post" action="/twitteruzi/index.php/tweet/create">
                     <textarea placeholder="What's Happening with Uzi bro?" name="txtNewTweet" rows="2" cols="90"
                               required minlength="3" style="font-size:16px;padding:10px; width:30%;"></textarea><br><br>
                     <button type="submit" name="btnTweet" class="btn btn-success btn-lg">Tweet <i
@@ -125,7 +117,7 @@ if (isset($_GET['logout'])) {
             <center>
                 <div class="bSearch">
                     <div class="searchWrapper" style="margin-left:30px;">
-                        <form method="get" action="/twitteruzi/route.php/tweet/search">
+                        <form method="get" action="/twitteruzi/index.php/tweet/search">
                             <input type="search" class="txtSearch" placeholder="Search" name="txtSearch">
                             <button type="submit" name="btnSearch" class="btnSearch" value=""><span
                                         class="glyphicon glyphicon-search"></span></button>
@@ -141,13 +133,10 @@ if (isset($_GET['logout'])) {
             <?php
             use App\Model\TweetDisplay;
 
-            // create a new instance of the TweetDisplay class
             $tweetDisplay = new TweetDisplay();
-            // call the displayTweets() method to get an array of tweet data
             $tweets = $tweetDisplay->displayTweets();
             ?>
 
-            <!-- iterate over the tweets and display them on the page -->
             <?php foreach ($tweets as $tweet): ?>
             <?php
             $username = $tweet['tweeter_name'];
@@ -183,7 +172,6 @@ if (isset($_GET['logout'])) {
 
                     <?php $textareaId = "comment_text_$tweetId"; ?>
 
-                    <!-- display the comment form -->
                     <form method='post'>
                         <input type='hidden' id='tweet_id' value='<?php echo $tweetId; ?>'>
                             <textarea id='<?php echo $textareaId; ?>' rows='1' cols='20' required style='font-size:16px;padding:10px; width:20%;float:left;'></textarea><br>
@@ -198,7 +186,7 @@ if (isset($_GET['logout'])) {
                                     <h4>Comments:</h4>
                                     <?php foreach ($comments as $comment): ?>
                                         <div class="comment">
-                                            <p><b><a style="font-size: 16px;" href='viewuser.php?user=<?php echo $username; ?>'>@<?php echo $username; ?></a></b></p>
+                                            <p><b><a style="font-size: 16px;" href='viewuser.php?user=<?php echo $comment['username']; ?>'>@<?php echo $comment['username']; ?></a></b></p>
                                             <p style="font-size: 16px;"><?php echo $comment['comment_text']; ?></p>
                                             <p><small style="float:right;margin-top: -60px;"><?php echo $comment['comment_time']; ?></small></p>
                                         </div>

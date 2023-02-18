@@ -2,10 +2,9 @@
 
 namespace App\Model;
 
-
 class DeleteTweet extends Database
 {
-    public $tweetId;
+    private $tweetId;
 
     public function __construct($tweetId)
     {
@@ -15,20 +14,27 @@ class DeleteTweet extends Database
 
     public function deleteTweet()
     {
+        // Prepare the delete query
+        $deleteQuery = "DELETE FROM tweets WHERE id = ?";
+        $stmt = $this->Conn->prepare($deleteQuery);
+        $stmt->bind_param('i', $this->tweetId);
 
-        $deleteQuery = "DELETE FROM tweets WHERE id = $this->tweetId";
-
-        if ($this->Conn->query($deleteQuery) !== TRUE) {
+        // Execute the delete query
+        if (!$stmt->execute()) {
             $response = [
                 'status' => 'error',
                 'message' => 'Error deleting tweet'
             ];
             return json_encode($response);
-            
         }
 
-        $deleteCommentQuery = "DELETE FROM comments WHERE tweet_id = $this->tweetId";
-        if ($this->Conn->query($deleteCommentQuery) !== TRUE) {
+        // Prepare the delete comments query
+        $deleteCommentQuery = "DELETE FROM comments WHERE tweet_id = ?";
+        $stmt = $this->Conn->prepare($deleteCommentQuery);
+        $stmt->bind_param('i', $this->tweetId);
+
+        // Execute the delete comments query
+        if (!$stmt->execute()) {
             $response = [
                 'status' => 'error',
                 'message' => 'Error deleting comments for tweet'
@@ -43,4 +49,3 @@ class DeleteTweet extends Database
         return json_encode($response);
     }
 }
-

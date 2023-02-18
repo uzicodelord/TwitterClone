@@ -1,10 +1,12 @@
 <?php
 namespace App\Controller;
 
+use App\BaseController;
 use App\Model\ProfileUpdater;
 use App\Model\Request;
 
-class EditController{
+class EditController extends BaseController
+{
     public function edit(){
         $profileUpdater = new ProfileUpdater();
         $request = new Request();

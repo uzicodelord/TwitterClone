@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\BaseController;
 use App\Model\DeleteTweet;
 use App\Model\Likes;
 use App\Model\Request;
@@ -8,7 +9,7 @@ use App\Model\Search;
 use App\Model\Tweet;
 use App\Model\TweetDisplay;
 
-class TweetController
+class TweetController extends BaseController
 {
     public function delete()
     {
@@ -26,13 +27,13 @@ class TweetController
 
     public function create()
     {
+
         $tweet = new Tweet();
         $request = new Request();
         $txtNewTweet = $request->post('txtNewTweet');
         $txtTweetName = $_SESSION['username'];
         $tweet->createTweet($txtNewTweet, $txtTweetName);
-        $rootUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/twitteruzi';
-        return header('Location: ' . $rootUrl . '/Views/home.php');
+
     }
 
 

@@ -33,42 +33,34 @@ if (isset($_GET['logout'])) {
                     document.getElementById("num_like" + tweetId).innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "/twitteruzi/route.php/tweet/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
+            xmlhttp.open("GET", "/twitteruzi/index.php/tweet/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
             xmlhttp.send();
         }
 
         function deleteTweet(tweetId) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/twitteruzi/route.php/tweet/delete", true);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/twitteruzi/index.php/tweet/delete", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.status === 'success') {
-                        alert('Tweet deleted successfully');
-                    } else {
-                        alert('Error deleting tweet');
-                    }
+                    location.reload();
                 }
             };
             xhr.send("tweetId=" + tweetId);
         }
 
         function submitComment(tweetId, textareaId) {
-            console.log("tweetId:", tweetId);
             const commentText = encodeURIComponent(document.getElementById(textareaId).value);
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "/twitteruzi/route.php/comment/create", true);
+            xhr.open("POST", "/twitteruzi/index.php/comment/create", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    alert("Comment posted successfully");
+                    location.reload();
                 }
             };
             xhr.send(`comment_text=${commentText}&tweet_id=${tweetId}`);
         }
-
-
     </script>
     <style>
         body {
@@ -169,7 +161,7 @@ if (isset($_GET['logout'])) {
                         <h4>Comments:</h4>
                         <?php foreach ($comments as $comment): ?>
                             <div class="comment">
-                                <p><b><a style="font-size: 16px;" href='viewuser.php?user=<?php echo $username; ?>'>@<?php echo $username; ?></a></b></p>
+                                <p><b><a style="font-size: 16px;" href='viewuser.php?user=<?php echo $comment['username']; ?>'>@<?php echo $comment['username']; ?></a></b></p>
                                 <p style="font-size: 16px;"><?php echo $comment['comment_text']; ?></p>
                                 <p><small style="float:right;margin-top: -60px;"><?php echo $comment['comment_time']; ?></small></p>
                             </div>
