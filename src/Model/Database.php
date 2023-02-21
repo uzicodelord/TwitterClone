@@ -6,11 +6,12 @@ use mysqli;
 
 class Database
 {
-    private $serverName;
-    private $username;
-    private $password;
-    private $databaseName;
-    protected $Conn;
+    private string $serverName;
+    private string $username;
+
+    private string $password;
+    private string $databaseName;
+    protected mysqli $Conn;
 
     public function __construct()
     {

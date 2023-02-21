@@ -1,29 +1,33 @@
 <?php
-namespace App;
 
-use App\Controller\HomeController;
+namespace App;
 
 class Router
 {
     protected $class;
     protected $method;
 
-    public function __construct(){
+    public function __construct()
+    {
+        session_start();
         $path = $_SERVER['REQUEST_URI'];
-        $path = str_replace("/twitteruzi/route.php/","",$path);
+        $base = "/twitteruzi/index.php";
+        $path = str_replace($base, "", $path);
+        list($class, $method) = explode("/", $path);
+        $this->class = "App\\Controllers\\" . ucfirst($class) . "Controller";
+        $this->method = substr($method, 0, strpos($method, "?"));
 
-        list($class,$method)= explode("/",$path);
-
-        $this->class = ucfirst($class);
-        $this->method = substr($method, 0,strpos($method, "?"));
-
-        if(empty($this->method)){
-            $this->method = "index";
+        if (empty($this->class)) {
+            $this->class = HomeController::class;
+        }
+        if (empty($this->method)) {
+            $this->method = 'index';
         }
     }
 
-    public function run(){
-        $class = new $this->class();
+    public function run()
+    {
+        $class = $this->class();
         echo $class->{$this->method}();
     }
 }
