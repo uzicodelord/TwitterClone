@@ -2,32 +2,35 @@
 
 namespace App;
 
+use App\Controller\HomeController;
+
 class Router
 {
-    protected $class;
+    protected string $class;
     protected $method;
 
     public function __construct()
     {
         session_start();
         $path = $_SERVER['REQUEST_URI'];
-        $base = "/twitteruzi/index.php";
-        $path = str_replace($base, "", $path);
+        $path = str_replace("/twitteruzi/index.php/", "", $path);
         list($class, $method) = explode("/", $path);
-        $this->class = "App\\Controllers\\" . ucfirst($class) . "Controller";
+        $this->class = "App\\Controller\\" . ucfirst($class) . "Controller";
         $this->method = substr($method, 0, strpos($method, "?"));
-
-        if (empty($this->class)) {
-            $this->class = HomeController::class;
-        }
-        if (empty($this->method)) {
-            $this->method = 'index';
-        }
     }
 
     public function run()
     {
-        $class = $this->class();
+        if (!class_exists($this->class)) {
+            $this->class = HomeController::class;
+        }
+
+        $class = new $this->class();
+
+        if (empty($this->method)) {
+            $this->method = 'index';
+        }
+
         echo $class->{$this->method}();
     }
 }

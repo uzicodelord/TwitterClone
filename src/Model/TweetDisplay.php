@@ -5,10 +5,10 @@ namespace App\Model;
 
 class TweetDisplay extends Database
 {
-    private $updateQuery;
-    private $viewLink;
+    private string $updateQuery;
     private $result;
-    private $tweetDisplayArray = array();
+    private array $tweetDisplayArray = array();
+    private string $viewLink;
 
     public function __construct()
     {
@@ -32,20 +32,25 @@ class TweetDisplay extends Database
             $tweetDisplay['comments'] = array();
 
             $tweetId = $row['id'];
-            $getCommentsQuery = "SELECT * FROM comments JOIN tweets ON comments.tweet_id = tweets.id WHERE comments.tweet_id = $tweetId";
-            $commentsResult = $this->Conn->query($getCommentsQuery);
-
-            while ($comment = $commentsResult->fetch_assoc()) {
-                $commentDisplay = array();
-                $commentDisplay['username'] = $comment['username'];
-                $commentDisplay['comment_time'] = $comment['comment_time'];
-                $commentDisplay['comment_text'] = $comment['comment_text'];
-                $tweetDisplay['comments'][] = $commentDisplay;
-            }
-
+            $comment = new Comment();
+            $tweetDisplay['comments'] = $comment->getCommentForTweet((int)$tweetId);
             $this->tweetDisplayArray[] = $tweetDisplay;
         }
 
         return $this->tweetDisplayArray;
+    }
+
+    public function displayTweetsForUser($username): array
+    {
+        $results = [];
+        $comment = new Comment();
+        $query = $this->Conn->query("SELECT * FROM tweets WHERE tweeter_name='" . $username . "'");
+
+        while ($row = $query->fetch_assoc()) {
+            $row['comments'] = $comment->getCommentForTweet((int)$row['id']);
+            $results[] = $row;
+        }
+
+        return $results;
     }
 }

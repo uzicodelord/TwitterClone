@@ -21,11 +21,10 @@ class ProfileUpdater extends Database
         }
     }
 
-    private function formatData($data)
+    private function formatData($data): string
     {
         $data = htmlspecialchars($data);
         $data = stripslashes($data);
-        $data = trim($data);
-        return $data;
+        return trim($data);
     }
 }

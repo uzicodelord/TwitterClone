@@ -22,4 +22,15 @@ class Comment extends Database
             echo $this->Conn->error;
         }
     }
+
+    public function getCommentForTweet(int $tweet_id): array
+    {
+        $query = "SELECT * FROM comments WHERE tweet_id =" . $tweet_id;
+        $commentsResult = $this->Conn->query($query);
+        $comments = [];
+        while($row = $commentsResult->fetch_assoc()) {
+            $comments[] = $row;
+        }
+        return $comments;
+    }
 }

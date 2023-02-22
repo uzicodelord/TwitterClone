@@ -7,16 +7,14 @@ use App\Model\Request;
 
 class EditController extends BaseController
 {
-    public function edit(){
+
+    public function index(){
+        include 'Views/header.php';
+        include 'Views/edit.php';
         $profileUpdater = new ProfileUpdater();
         $request = new Request();
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $email = $request->post('txtEmail');
-            $password = !empty($request->post('txtNewPassword')) ? $request->post('txtNewPassword') : '';
-            $profileUpdater->updateProfile($email, $password);
-            $rootUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/twitteruzi';
-            return header('Location: ' . $rootUrl . '/Views/edit.php');
-        }
+        $email = $request->post('txtEmail');
+        $password = !empty($request->post('txtNewPassword')) ? $request->post('txtNewPassword') : '';
+        $profileUpdater->updateProfile($email, $password);
     }
 }

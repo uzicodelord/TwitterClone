@@ -99,8 +99,7 @@ class SignUpAndSignIn extends Database
                     $row = $result->fetch_assoc();
 
                     $_SESSION['email'] = $row['email'];
-
-                    header('location:home.php');
+                    header("Location: /twitteruzi/index.php/home/index");
                 }
             }
         }

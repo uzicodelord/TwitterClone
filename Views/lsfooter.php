@@ -1,0 +1,29 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/twitteruzi/Bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('body').scrollspy({
+            target: ".navbar",
+            offset: 50
+        });
+
+        $("#navBar a").on('click', function (event) {
+
+            event.preventDefault();
+
+            // Store hash (#)
+            var hash = this.hash;
+
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top
+            }, 800, function () {
+                window.location.hash = hash;
+            });
+        });
+
+    })
+</script>
+</body>
+
+</html>

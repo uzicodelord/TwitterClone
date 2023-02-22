@@ -1,11 +1,8 @@
 <?php
 
-use App\Router;
+require_once "vendor/autoload.php";
 
-if (!isset($_SESSION['username'])) {
-    header('location: Views/login.php');
-    exit();
-}
+use App\Router;
 
 $router = new Router();
 $router->run();

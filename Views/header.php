@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TwitterClone</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/twitteruzi/css/homepage.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <!--Ajax -->
+    <script>
+        function likeTweet(tweetName, tweetId, tweetlikes) {
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("num_like" + tweetId).innerHTML = xmlhttp.responseText;
+                }
+            };
+            xmlhttp.open("GET", "/twitteruzi/index.php/like/like?q=" + tweetName + "&p=" + tweetId + "&l=" + tweetlikes, false);
+            xmlhttp.send();
+        }
+
+        function deleteTweet(tweetId) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/twitteruzi/index.php/delete/index", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    location.reload();
+                }
+            };
+            xhr.send("tweetId=" + tweetId);
+        }
+
+        function submitComment(tweetId, textareaId) {
+            const commentText = encodeURIComponent(document.getElementById(textareaId).value);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/twitteruzi/index.php/comment/index", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    location.reload();
+                }
+            };
+            xhr.send(`comment_text=${commentText}&tweet_id=${tweetId}`);
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #008abe;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: white;
+        }
+
+        textarea {
+            resize: none;
+        }
+    </style>
+
+
+</head>
+<body>

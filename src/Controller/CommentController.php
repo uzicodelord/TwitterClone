@@ -7,7 +7,7 @@ use App\BaseController;
 class CommentController extends BaseController
 {
 
-    public function create()
+    public function index()
     {
         $username = $_SESSION['username'];
 
