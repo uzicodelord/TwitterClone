@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Controller\HomeController;
+use App\Controller\LoginController;
 
 class Router
 {
@@ -22,7 +23,7 @@ class Router
     public function run()
     {
         if (!class_exists($this->class)) {
-            $this->class = HomeController::class;
+            $this->class = LoginController::class;
         }
 
         $class = new $this->class();

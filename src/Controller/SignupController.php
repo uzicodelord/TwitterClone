@@ -16,7 +16,6 @@ class SignupController extends BaseController
         $txtUsernameErr = $loginsignup->getTxtUsernameErr();
         $txtPassword = $loginsignup->getTxtPassword();
         $txtPasswordErr = $loginsignup->getTxtPasswordErr();
-        include "Resources/views/lsheader.twig";
         $this->view('signup.twig', ['RegStatus' => $RegStatus]);
         include "Resources/views/lsfooter.twig";
     }

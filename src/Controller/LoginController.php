@@ -10,7 +10,6 @@ public function index()
     {
     $login = new SignUpAndSignIn();
     $LoginStatus = $login->getLoginStatus();
-        include "Resources/views/lsheader.twig";
         $this->view('login.twig', ['LoginStatus' => $LoginStatus]);
         include "Resources/views/lsfooter.twig";
     }

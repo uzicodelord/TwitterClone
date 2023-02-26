@@ -1,3 +1,6 @@
+{% extends 'header.twig' %}
+
+{% block content %}
 <div class="container">
     <div class="row">
         <center>
@@ -72,3 +75,7 @@
             </div>
         </div>
 {% endfor %}
+{% endblock %}
+        {% block footer %}
+            {% include 'footer.twig' %}
+        {% endblock %}

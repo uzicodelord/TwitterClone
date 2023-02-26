@@ -20,11 +20,9 @@ class HomeController extends BaseController
         $tweetDisplay = new TweetDisplay();
         $tweets = $tweetDisplay->displayTweets();
         $username = $_SESSION['username'];
-        include 'Resources/views/header.twig';
         $this->view('home.twig',
             ['tweets' => $tweets,
             'username' => $username
             ]);
-        include 'Resources/views/footer.twig';
     }
 }

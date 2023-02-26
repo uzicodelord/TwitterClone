@@ -1,3 +1,6 @@
+{% extends 'lsheader.twig' %}
+
+{% block content %}
 <div class="uzi">
     <div id="signUp">
         <form method="post" action="/twitteruzi/index.php/signup/signup">
@@ -37,3 +40,7 @@
         </form>
     </div>
 </div>
+{% endblock %}
+{% block footer %}
+    {% include 'lsfooter.twig' %}
+{% endblock %}

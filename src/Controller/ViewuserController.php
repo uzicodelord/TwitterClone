@@ -21,7 +21,6 @@ class ViewuserController extends BaseController
         $tweets = $tweetDisplay->displayTweets();
         $username = $_SESSION['username'];
         $user = $_GET['user'];
-        include 'Resources/views/header.twig';
         $this->view('viewuser.twig',
             [
                 'tweets' => $tweets,
