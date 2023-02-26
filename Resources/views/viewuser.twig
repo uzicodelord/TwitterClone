@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="icon-bar" style="width:100%;border:0;font-size: 50px; letter-spacing: 50px">
+                <a  href="/twitteruzi/index.php/home/index">
+                    <i class="fa fa-home tabLogo "></i></a>
+                <a style="color:white; background-color: #333;" href="/twitteruzi/index.php/profile/index"><i class="fa fa-user tabLogo "></i></a>
+                <a href="/twitteruzi/index.php/edit/index"><i class="fa fa-cog tabLogo "></i></a>
+                <a href="/twitteruzi/index.php/logout/index"><i class="fa fa-sign-out tabLogo "></i></a>
+            </div>
+            <div id="myProfile" class="mainContainer" style="height:auto;"><br>
+                <div class="row">
+                    <h2 style="float: left">@
+                        {{ username }}
+                    </h2>
+
+                    <h5><a href="/twitteruzi/index.php/edit/index" style="color:#fff;float:right;">[Edit Profile]</a></h5>
+                </div>
+
+                <h4><b>My Tweets</b></h4>
+            </div>
+    </div>
+    <div id="recentTw" class="mainContainer">
+        <br>
+        {% for tweet in tweets %}
+        {% if user is defined and tweet['tweeter_name'] == user %}
+        <Br>
+        <br>
+        <div class='row eachTw' style="background-color: #fff">
+            <div class='col-md-12 col-xs-10'>
+
+
+            <span class='postHeader'><a style="font-size: 25px;" href='/twitteruzi/index.php/viewuser/index?user={{tweet['tweeter_name']}}'>@{{tweet['tweeter_name']}}</a><br>
+            <span style='font-size:14px;margin-top:-15px; color:#bfbfbf; float:right'>{{tweet['tweet_time']}}</span>
+            <div style='font-family: sans-serif;font-size: 20px;margin-top: -15px;'>
+                <br>{{tweet['tweet_content']}}<br><br><center><div class='line'></div></div></center><br>
+                <p style='font-size:15px; '>
+                    <a style='cursor:pointer' onclick=likeTweet('{{tweet['tweeter_name']}}','{{tweet['id']}}','{{tweet['tweet_likes']}}') name='like' style='color:red; '>
+                        <span class='fa fa-heart' id='heart' style='font-size:22px;color:red; '></span>
+                    </a>
+                    <span id='num_like{{tweet['id']}}'>{{tweet['tweet_likes']}}</span> people(s) liked this.
+                </p>
+                </span>
+                {% if tweet['tweeter_name'] == username %}
+                    <form method='post'>
+                        <input type='hidden' name='tweetId' value='{{tweet['id']}}'>
+                        <input type='button' onclick=deleteTweet('{{tweet['id']}}') class='btn btn-danger btn-lg' value='Delete' style='float:right;'>
+
+                    </form>
+
+                {% endif %}
+                {% set textareaId = "comment_text" ~ tweet['id'] %}
+                <form method='post'>
+                    <input type='hidden' id='tweet_id' value='{{tweet['id']}}'>
+                    <textarea id='{{textareaId}}' rows='1' cols='20' required style='font-size:16px;padding:10px; width:20%;float:left;'></textarea><br>
+                    <button style='float:left;margin-top:-20px;' type='button' class='btn btn-success btn-lg' onclick='submitComment({{tweet['id']}}, "{{textareaId}}")'>Comment</button><br><br><br>
+                </form>
+
+                <div class="commentBox" style="margin-top: 0;">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% set comments = tweet['comments'] %}
+                            <h4 style="color: black;float: left" >Comments:</h4><br><br>
+                            {% for comment in comments %}
+                                <div class="comment">
+                                    <p><b><a style="font-size: 16px;" href='/twitteruzi/index.php/viewuser/index?user={{comment['username']}}'>@{{comment['username']}}</a></b></p>
+                                    <p style="font-size: 16px;">{{comment['comment_text']}}</p>
+                                    <p><small style="float:right;margin-top: -60px;">{{comment['comment_time']}}</small></p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}

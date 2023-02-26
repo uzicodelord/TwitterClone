@@ -12,6 +12,11 @@ class ProfileController extends BaseController
         $user = $_SESSION['username'];
         $tweetDisplay = new TweetDisplay();
         $tweets = $tweetDisplay->displayTweetsForUser($user);
-            $this->view("Views/profile.php", compact('tweets'));
+        $username = $_SESSION['username'];
+        $email = $_SESSION['email'];
+        include 'Resources/views/header.twig';
+        $this->view('profile.twig',
+            ['tweets' => $tweets, 'username' => $username, 'email' => $email]);
+        include 'Resources/views/footer.twig';
     }
 }

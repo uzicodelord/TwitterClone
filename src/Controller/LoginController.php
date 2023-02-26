@@ -1,19 +1,18 @@
 <?php
 
 namespace App\Controller;
-use App\Model\Request;
+use App\BaseController;
 use App\Model\SignUpAndSignIn;
 
-class LoginController
+class LoginController extends BaseController
 {
 public function index()
     {
     $login = new SignUpAndSignIn();
-    $RegStatus = $login->getRegStatus();
     $LoginStatus = $login->getLoginStatus();
-        include "Views/lsheader.php";
-        include "Views/login.php";
-        include "Views/lsfooter.php";
+        include "Resources/views/lsheader.twig";
+        $this->view('login.twig', ['LoginStatus' => $LoginStatus]);
+        include "Resources/views/lsfooter.twig";
     }
 
     public function login()

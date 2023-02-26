@@ -2,7 +2,9 @@
     "description": "A Twitter clone by Uzi",
     "type": "project",
     "require": {
-        "psr/log": "^3.0"
+        "psr/log": "^3.0",
+        "twig/twig": "^3.5",
+        "symfony/routing": "^6.2"
     },
     "autoload": {
         "psr-4": {

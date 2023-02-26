@@ -9,8 +9,8 @@ class EditController extends BaseController
 {
 
     public function index(){
-        include 'Views/header.php';
-        include 'Views/edit.php';
+        include 'views/header.twig';
+        include 'views/edit.twig';
         $profileUpdater = new ProfileUpdater();
         $request = new Request();
         $email = $request->post('txtEmail');

@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Controller;
+use App\BaseController;
 use App\Model\SignUpAndSignIn;
 
-class SignupController
+class SignupController extends BaseController
 {
     public function index()
     {
@@ -15,9 +16,9 @@ class SignupController
         $txtUsernameErr = $loginsignup->getTxtUsernameErr();
         $txtPassword = $loginsignup->getTxtPassword();
         $txtPasswordErr = $loginsignup->getTxtPasswordErr();
-        include "Views/lsheader.php";
-        include "Views/signup.php";
-        include "Views/lsfooter.php";
+        include "Resources/views/lsheader.twig";
+        $this->view('signup.twig', ['RegStatus' => $RegStatus]);
+        include "Resources/views/lsfooter.twig";
     }
 
     public function signup()

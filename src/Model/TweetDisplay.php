@@ -14,7 +14,7 @@ class TweetDisplay extends Database
     {
         parent::__construct();
         $this->updateQuery = "SELECT * FROM tweets ORDER BY tweet_time DESC LIMIT 0, 50";
-        $this->viewLink = "viewuser.php?user=";
+        $this->viewLink = "/twitteruzi/index.php/viewuser/index?user=";
         $this->result = $this->Conn->query($this->updateQuery);
     }
 

@@ -7,7 +7,7 @@ class Search extends Database
 
     public function searchUser($txtSearch)
     {
-        $viewLink = "/twitteruzi/Views/viewuser.php?user=";
+        $viewLink = "/twitteruzi/index.php/viewuser/index?user=";
         $txtSearch = trim(mysqli_escape_string($this->Conn, $txtSearch));
         $searchQuery = "SELECT * FROM users WHERE username LIKE '%$txtSearch%' or username LIKE '%$txtSearch%' or email LIKE '%$txtSearch%'";
         $result = $this->Conn->query($searchQuery);
